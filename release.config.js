@@ -1,5 +1,5 @@
 module.exports = {
-  repositoryUrl: 'https://github.com/TrustVC/trustvc.git',
+  repositoryUrl: 'https://github.com/PDC-Finance/trustvc-bp.git',
   branches: [
     {
       name: 'main',
