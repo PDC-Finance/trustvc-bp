@@ -20,6 +20,7 @@
     "lint:fix": "npx eslint . --fix",
     "build": "npm run clean && tsup",
     "clean": "rm -rf dist/",
+    "publish:patch": "npm version patch && npm publish",
     "precommit": "lint-staged",
     "prepare": "husky",
     "release": "semantic-release --parallel=1 --repositoryUrl=https://github.com/PDC-Finance/trustvc-bp.git --verbose"
