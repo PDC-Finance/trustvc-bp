@@ -1,12 +1,12 @@
-# TrustVC
+# Blockpeer TrustVC
 
 ## About
 
-TrustVC is a comprehensive wrapper library designed to simplify the signing and verification processes for TrustVC W3C [Verifiable Credentials (VC)](https://github.com/TrustVC/w3c) and OpenAttestation Verifiable Documents (VD), including OpenCert Verifiable Documents, adhering to the W3C [VC](https://www.w3.org/TR/vc-data-model/) Data Model v2.0 (W3C Standard). It ensures compatibility and interoperability for Verifiable Credentials while supporting OpenAttestation [Verifiable Documents (VD)](https://github.com/Open-Attestation/open-attestation) v6.9.5. TrustVC seamlessly integrates functionalities for handling W3C Verifiable Credentials and OpenAttestation Verifiable Documents, leveraging existing TradeTrust libraries and smart contracts for [Token Registry](https://github.com/TradeTrust/token-registry) (V4 and V5). Additionally, it includes essential utility functions for strings, networks, and chains, making it a versatile tool for developers working with decentralized identity and verifiable data solutions.
+Blockpeer TrustVC is a comprehensive wrapper library designed to simplify the signing and verification processes for TrustVC W3C [Verifiable Credentials (VC)](https://github.com/TrustVC/w3c) and OpenAttestation Verifiable Documents (VD), including OpenCert Verifiable Documents, adhering to the W3C [VC](https://www.w3.org/TR/vc-data-model/) Data Model v2.0 (W3C Standard). It ensures compatibility and interoperability for Verifiable Credentials while supporting OpenAttestation [Verifiable Documents (VD)](https://github.com/Open-Attestation/open-attestation) v6.9.5. TrustVC seamlessly integrates functionalities for handling W3C Verifiable Credentials and OpenAttestation Verifiable Documents, leveraging existing TradeTrust libraries and smart contracts for [Token Registry](https://github.com/TradeTrust/token-registry) (V4 and V5). Additionally, it includes essential utility functions for strings, networks, and chains, making it a versatile tool for developers working with decentralized identity and verifiable data solutions.
 
 ## Table of Contents
 
-- [TrustVC](#trustvc)
+- [Blockpeer TrustVC](#blockpeer-trustvc)
   - [About](#about)
   - [Installation](#installation)
   - [Functions](#functions)
@@ -33,7 +33,19 @@ TrustVC is a comprehensive wrapper library designed to simplify the signing and 
 **Prerequisites:**
 - Node.js >= 20.0.0
 
-```ts
+**Install package from GitHub Packages (private registry):**
+> Use a GitHub token with at least `read:packages` permission.
+
+```bash
+export GITHUB_TOKEN=<your_github_token>
+echo "@pdc-finance:registry=https://npm.pkg.github.com" >> ~/.npmrc
+echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" >> ~/.npmrc
+npm install @pdc-finance/bp-trustvc
+```
+
+**For local development in this repository:**
+
+```bash
 npm install
 npm run build
 npm run test
@@ -67,7 +79,7 @@ npm run test
 > If the document version is unsupported or if an error occurs during wrapping.
 
 ```ts
-import { wrapOADocument } from '@trustvc/trustvc';
+import { wrapOADocument } from '@pdc-finance/bp-trustvc';
 
 const document = {
   /* OpenAttestation document (v2 or v3) */
@@ -100,7 +112,7 @@ console.log(wrappedDocument);
 #### Example
 
 ```ts
-import { wrapOADocuments } from '@trustvc/trustvc';
+import { wrapOADocuments } from '@pdc-finance/bp-trustvc';
 
 const documents = [
   {
@@ -128,7 +140,7 @@ The signing functionality is split into two methods:
 #### a) OpenAttestation Signing (signOA) [v2](https://github.com/Open-Attestation/open-attestation/tree/master/src/2.0) [v3](https://github.com/Open-Attestation/open-attestation/tree/master/src/3.0)
 
 ```ts
-import { wrapOA, signOA } from '@trustvc/trustvc';
+import { wrapOA, signOA } from '@pdc-finance/bp-trustvc';
 
 const rawDocument = {
   '@context': [
@@ -162,7 +174,7 @@ const signedWrappedDocument = await signOA(wrappedDocument, {
 The `signW3C` function signs W3C Verifiable Credentials using the provided cryptographic suite and key pair. By default, it uses the **ecdsa-sd-2023** crypto suite unless otherwise specified. It also supports **bbs-2023** for modern BBS signatures.
 
 ```ts
-import { signW3C, VerificationType } from '@trustvc/trustvc';
+import { signW3C, VerificationType } from '@pdc-finance/bp-trustvc';
 
 const rawDocument = {
   '@context': [
@@ -253,7 +265,7 @@ const signingResultWithBbs = await signW3C(
 > When using ECDSA-SD-2023 or BBS-2023 crypto suites, we can derive a new credential with selective disclosure. This means you can choose which parts of the credential to reveal while keeping others hidden.
 
 ```ts
-import { deriveW3C } from '@trustvc/trustvc';
+import { deriveW3C } from '@pdc-finance/bp-trustvc';
 
 // This is a signed document using ecdsa-sd-2023
 const signedDocument = {
@@ -304,7 +316,7 @@ const derivationResult = await deriveW3C(signedDocument, {
 > TrustVC simplifies the verification process with a single function that supports W3C Verifiable Credentials (VCs) and OpenAttestation Verifiable Documents (VDs), including OpenCert Verifiable Documents. Whether you're working with W3C standards or OpenAttestation standards, TrustVC handles the verification seamlessly. For ECDSA-SD-2023 and BBS-2023 signed documents, which normally require derivation before verification, TrustVC automatically handles this process internally - if a document is not derived, the `verifyDocument` function will automatically derive and verify the document in a single step.
 
 ```ts
-import { verifyDocument } from '@trustvc/trustvc';
+import { verifyDocument } from '@pdc-finance/bp-trustvc';
 
 const signedDocument = {
   '@context': [
@@ -377,7 +389,7 @@ The output is a hexadecimal string representing the encrypted data.
 #### Example 1: Basic Encryption
 
 ```ts
-import { encrypt } from '@trustvc/trustvc';
+import { encrypt } from '@pdc-finance/bp-trustvc';
 
 const message = 'Hello, ChaCha20!';
 const key = 'my-secret-key';
@@ -389,7 +401,7 @@ console.log(`Encrypted Message: ${encryptedMessage}`);
 #### Example 2: Encryption with a Custom Nonce
 
 ```ts
-import { encrypt } from '@trustvc/trustvc';
+import { encrypt } from '@pdc-finance/bp-trustvc';
 
 const message = 'Secure this message.';
 const key = 'another-secret-key';
@@ -459,7 +471,7 @@ The function throws an error if:
 #### Example 1: Basic Decryption
 
 ```ts
-import { decrypt } from '@trustvc/trustvc';
+import { decrypt } from '@pdc-finance/bp-trustvc';
 
 const encryptedMessage = 'e8b7c7e9...';
 const key = 'my-secret-key';
@@ -471,7 +483,7 @@ console.log(`Decrypted Message: ${decryptedMessage}`);
 #### Example 2: Decryption with a Custom Nonce
 
 ```ts
-import { decrypt } from '@trustvc/trustvc';
+import { decrypt } from '@pdc-finance/bp-trustvc';
 
 const encryptedMessage = 'f3a7e9b2...';
 const key = 'another-secret-key';
@@ -524,7 +536,7 @@ It also relies on the `ts-chacha20` library for decryption operations.
 #### Connect to existing token registry
 
 ```ts
-import { v4Contracts } from '@trustvc/trustvc';
+import { v4Contracts } from '@pdc-finance/bp-trustvc';
 
 const v4connectedRegistry = v4Contracts.TradeTrustToken__factory.connect(
   tokenRegistryAddress,
@@ -576,7 +588,7 @@ In Token Registry v5, the way you connect to a registry hasn’t changed much, b
 In TrustVC, you will use the token-registry-v5 module to access the Token Registry v5 contracts.
 
 ```ts
-import { v5Contracts } from '@trustvc/trustvc';
+import { v5Contracts } from '@pdc-finance/bp-trustvc';
 
 const connectedRegistry = v5Contracts.TradeTrustToken__factory.connect(
   tokenRegistryAddress,
@@ -637,7 +649,7 @@ When connecting to Title Escrow, the process is similar. You will use the update
 > Please note that any value in the `remark` field is limited to **120** characters, and encryption is **recommended**.
 
 ```ts
-import { v5Contracts } from '@trustvc/trustvc';
+import { v5Contracts } from '@pdc-finance/bp-trustvc';
 
 const connectedEscrow = v5Contracts.TitleEscrow__factory.connect(
   existingTitleEscrowAddress,
@@ -782,7 +794,7 @@ builder.qrCode({
 ```
 
 ##### Sign the Document
-To sign the document, provide a `PrivateKeyPair` from `@trustvc/trustvc`. The builder supports both **ECDSA-SD-2023** (default) and **BBS-2023** cryptographic signature schemes.
+To sign the document, provide a `PrivateKeyPair` from `@pdc-finance/bp-trustvc`. The builder supports both **ECDSA-SD-2023** (default) and **BBS-2023** cryptographic signature schemes.
 
 **ECDSA-SD-2023 Signing (Default)**
 
@@ -804,7 +816,7 @@ console.log(signedDocument);
 **BBS-2023 Signing**
 
 ```ts
-import { CryptoSuite } from '@trustvc/trustvc';
+import { CryptoSuite } from '@pdc-finance/bp-trustvc';
 
 const bbs2023KeyPair: PrivateKeyPair = {
     '@context': 'https://w3id.org/security/multikey/v1',
@@ -926,7 +938,7 @@ Deploys a new DocumentStore contract to the blockchain.
 **Example:**
 
 ```ts
-import { deployDocumentStore } from '@trustvc/trustvc';
+import { deployDocumentStore } from '@pdc-finance/bp-trustvc';
 
 const receipt = await deployDocumentStore(
   'My Document Store',
@@ -962,7 +974,7 @@ Issues a document to the Document Store.
 **Example:**
 
 ```ts
-import { documentStoreIssue } from '@trustvc/trustvc';
+import { documentStoreIssue } from '@pdc-finance/bp-trustvc';
 
 const txHash = await documentStoreIssue(
   '0x1234567890123456789012345678901234567890',
@@ -998,7 +1010,7 @@ Revokes a document from the Document Store.
 **Example:**
 
 ```ts
-import { documentStoreRevoke } from '@trustvc/trustvc';
+import { documentStoreRevoke } from '@pdc-finance/bp-trustvc';
 
 const txHash = await documentStoreRevoke(
   '0x1234567890123456789012345678901234567890',
@@ -1051,7 +1063,7 @@ const options = {
 #### Basic Usage
 
 ```ts
-import { deployDocumentStore, documentStoreIssue, documentStoreRevoke } from '@trustvc/trustvc';
+import { deployDocumentStore, documentStoreIssue, documentStoreRevoke } from '@pdc-finance/bp-trustvc';
 
 // Deploy a new document store
 const receipt = await deployDocumentStore('My Store', ownerAddress, signer);
@@ -1066,7 +1078,7 @@ await documentStoreRevoke(receipt.contractAddress, documentHash, signer);
 #### Advanced Usage with Options
 
 ```ts
-import { CHAIN_ID } from '@trustvc/trustvc';
+import { CHAIN_ID } from '@pdc-finance/bp-trustvc';
 
 // Deploy with specific network and gas settings
 const receipt = await deployDocumentStore(
